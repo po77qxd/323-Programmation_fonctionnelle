@@ -81,28 +81,15 @@
                     new Produit(15, "Crizzi", "Groseilles", 12, "kg", 3.50)
             };
 
-            int vendeurDePeche = 0;
-            int maxQte = 0;
-            string producteurMaxPasteque = "";
-            int emplacementMaxPasteque = 0;
-            foreach (Produit produit in produits)
-            {
-                if (produit._produit == "Pêches")
-                {
-                    vendeurDePeche++;
-                }
-                if (produit._produit == "Pastèques")
-                {
-                    if (produit._qte > maxQte)
-                    {
-                        maxQte = produit._qte;
-                        producteurMaxPasteque = produit._producteur;
-                        emplacementMaxPasteque = produit._emplacement;
-                    }
-                }
-            }
-            Console.WriteLine($"Il y a {vendeurDePeche} vendeurs de pêches");
-            Console.WriteLine($"C'est {producteurMaxPasteque} qui a le plus de pastèques (stand {emplacementMaxPasteque}, {maxQte} pièces)");
+            List<Produit> peachVendors = produits.Where(produit => produit._produit == "Pêches").ToList();
+            Produit maxPasteques = produits.Where(produit => produit._produit == "Pastèques").OrderByDescending(produit => produit._qte).First();
+            
+            Produit mostExpensiveProduct = produits.OrderByDescending(produit => produit._prixParUnite).First();
+
+            Console.WriteLine($"Il y a {peachVendors.Count()} vendeurs de pêches");
+            Console.WriteLine($"C'est {maxPasteques._producteur} qui a le plus de pastèques (stand {maxPasteques._emplacement}, {maxPasteques._qte} pièces)");
+
+            Console.WriteLine($"Le produit le plus cher est {mostExpensiveProduct._produit}, avec un cout de {mostExpensiveProduct._prixParUnite} par unité");
         }
         public class Produit
         {
