@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ex_mib-map", "ex_mib-map\ex_mib-map.csproj", "{CBD2CFE8-9F67-431D-988A-E57189400992}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBD2CFE8-9F67-431D-988A-E57189400992}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBD2CFE8-9F67-431D-988A-E57189400992}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBD2CFE8-9F67-431D-988A-E57189400992}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBD2CFE8-9F67-431D-988A-E57189400992}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8E856A90-661B-4B7B-9242-7AF8D957C0AC}
+	EndGlobalSection
+EndGlobal
