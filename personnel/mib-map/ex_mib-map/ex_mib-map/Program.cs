@@ -1,4 +1,10 @@
-﻿namespace ex_mib_map
+﻿using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace ex_mib_map
 {
     internal class Program
     {
@@ -117,6 +123,25 @@
             //.ToString();
             //Console.WriteLine(text[0].Item1);
             File.WriteAllText("produitEx1.csv", $"Seller; Product; CA\n{text[0].Item1}; {text[0].Item2}; {text[0].Item3}");
+
+            //ex2
+            Func<string, string> anonProducteurMore = p => p.Substring(0, 1) + (p.Length - 1).ToString() + p.Substring(p.Length - 1, 1);
+            Func<int, string> categorize = qte => qte < 10 ? "Stock faible" : qte > 15 ? "Stock eleve" : "Stock normal";
+            Func<int, double, double> adjustUnitValue = (qte, ppu) => qte < 10 ? (ppu - ppu * 0.15) : qte > 15 ? ppu : (ppu - ppu * 0.05);
+            Func<int, double, string> CApremium = (qte, prixParUnite) => qte * prixParUnite > 100 ? "Premium" : "Standard";
+
+            var produitEx2 = produits
+                .Select(p => (anonProducteurMore(p._producteur),
+                                categorize(p._qte),
+                                adjustUnitValue(p._qte, p._prixParUnite),
+                                CApremium(p._qte, p._prixParUnite)))
+                .ToList();
+            //.ForEach(x => Console.WriteLine(x));
+
+            //string json = ;
+            Console.WriteLine(json);
+
+
         }
         public class Produit
         {
