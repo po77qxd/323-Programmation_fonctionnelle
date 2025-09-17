@@ -80,6 +80,14 @@
                     new Produit(15, "Crizzi", "Myrtilles", 12, "kg", 3.00),
                     new Produit(15, "Crizzi", "Groseilles", 12, "kg", 3.50)
             };
+
+            //0
+            int maxGro = produits.Where(produit => produit._produit == "Groseilles").Select(produit => produit._qte).Sum();
+            Console.WriteLine("maxGro:"+ maxGro);
+
+            //1
+            produits.GroupBy(produit => produit._producteur).ToList().ForEach(produit => Console.WriteLine(produit.Key));
+            //produits.GroupBy(produit => produit._producteur).Select(x => x._qte)
         }
         public class Produit
         {
