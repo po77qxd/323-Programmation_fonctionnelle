@@ -155,8 +155,23 @@ namespace ex_mib_map
                         CApremium(p._qte, p._prixParUnite)))
                     .ToList();
             };
-            var result = MesurePerf(dashboardLamba);
-            Console.WriteLine(result);
+            var resultDashboardLamba = MesurePerf(dashboardLamba);
+            Console.WriteLine("dashboardLamba : " + resultDashboardLamba);
+
+            Action dashboardAnonObject = () =>
+            {
+                var produitEx2 = produits
+                    .Select(p => new
+                    {
+                        prod = anonProducteurMore(p._producteur),
+                        cat = categorize(p._qte),
+                        value = adjustUnitValue(p._qte, p._prixParUnite),
+                        quality = CApremium(p._qte, p._prixParUnite)
+                    })
+                    .ToList();
+            };
+            var resultdashboardAnonObject = MesurePerf(dashboardAnonObject);
+            Console.WriteLine("dashboardAnonObject : " + resultdashboardAnonObject);
         }
 
         static (long time, long memory) MesurePerf(Action action, int iterations = 1000)
