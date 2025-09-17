@@ -1,7 +1,9 @@
-﻿using System.Net.Http.Json;
+﻿using System.Diagnostics;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using static ex_mib_map.Program;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace ex_mib_map
@@ -139,10 +141,45 @@ namespace ex_mib_map
             //.ForEach(x => Console.WriteLine(x));
 
             //string json = ;
-            Console.WriteLine(json);
+            //Console.WriteLine(json);
 
 
+            //Mesure de performance
+            Action dashboardLamba = () =>
+            {
+                var produitEx2 = produits
+                    .Select(p => (
+                        anonProducteurMore(p._producteur),
+                        categorize(p._qte),
+                        adjustUnitValue(p._qte, p._prixParUnite),
+                        CApremium(p._qte, p._prixParUnite)))
+                    .ToList();
+            };
+            var result = MesurePerf(dashboardLamba);
+            Console.WriteLine(result);
         }
+
+        static (long time, long memory) MesurePerf(Action action, int iterations = 1000)
+        {
+            // Forcer le garbage collection avant mesure
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+
+            var memoryBefore = GC.GetTotalMemory(false);
+            var stopwatch = Stopwatch.StartNew();
+
+            for (int i = 0; i < iterations; i++)
+            {
+                action();
+            }
+
+            stopwatch.Stop();
+            var memoryAfter = GC.GetTotalMemory(false);
+
+            return (stopwatch.ElapsedMilliseconds, memoryAfter - memoryBefore);
+        }
+
         public class Produit
         {
             public int _emplacement { get; private set; }
