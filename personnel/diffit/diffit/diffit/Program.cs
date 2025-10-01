@@ -21,6 +21,10 @@
             Console.Write("Fichier B: ");
             string? pathB = Console.ReadLine();
 
+            //for dev
+            //pathA = "../../../v1.txt";
+            //pathB = "../../../v2.txt";
+
             // Vérification des entrées utilisateur
             var paths = new string?[] { pathA, pathB };
             bool filesAreValid = paths.Aggregate(true, (a, b) => a && b != null && File.Exists(b));
@@ -77,16 +81,20 @@
             if (ignoreTabs)
             {
                 cleanedLinesA = cleanedLinesA.Select(line => cleanTabs(line)).ToList();
-                cleanedLinesB = cleanedLinesB.Select(line => cleanSpaces(line)).ToList();
+                cleanedLinesB = cleanedLinesB.Select(line => cleanTabs(line)).ToList();
             }
             if (ignoreCase)
             {
                 cleanedLinesA = cleanedLinesA.Select(line => enforceCase(line)).ToList();
-                cleanedLinesB = cleanedLinesB.Select(line => cleanSpaces(line)).ToList();
+                cleanedLinesB = cleanedLinesB.Select(line => enforceCase(line)).ToList();
             }
 
             // TODO: 06 Créer et remplir une liste de LinesComparison à partir de linesA et linesB
-            List<LinesComparison> comparisons = new();
+            List<LinesComparison> comparisons = new() { };
+            comparisons = cleanedLinesA
+                .Zip(cleanedLinesB, (lineA, lineB) => new LinesComparison() { Number = cleanedLinesA.IndexOf(lineA), ContentA = lineA, ContentB = lineB })
+                .ToList();
+            
 
             // TODO: 07 Sélectionner les lignes qui ont des différences
             var diffLines = new List<LinesComparison>();
@@ -119,7 +127,7 @@
             Console.Write("\n\nSPECIAL FEATURE: Clé de chiffrement [1-25]: ");
             byte key = Convert.ToByte(Console.ReadLine());
         }
-    public class LinesComparison
+        public class LinesComparison
         {
             public int Number { get; set; }
             public string ContentA { get; set; } = "";
@@ -134,6 +142,6 @@
             }
 
             public int LengthVariation { get => Math.Abs(ContentA.Length - ContentB.Length); }
-            }
         }
+    }
 }
