@@ -112,9 +112,17 @@
             // Ainsi "12345".Zip("ABCDE", (a, b) => $"{a}{b}").ToList().ForEach(Console.Write);//1A2B3C4D5E
             // ATTENTION: zip ne prend que le nombre d’éléments minimum commun entre 2 listes...
             // Ceci implique une correction: en plus du nombre de différences, il faut ajouter la différence du nombre de caractères entre les deux...
-            Func<LinesComparison, int> countVariations = _ => -1;
+            Func<LinesComparison, int> countVariations = lineComp =>
+            {
+                int diffNumber = lineComp.ContentA
+                    .Zip(lineComp.ContentB, (charA, charB) => (charA, charB))
+                    .Where(x => x.charA != x.charB)
+                    .Count();
+                return diffNumber + lineComp.LengthVariation;
+            };
 
             // TODO: 10 Afficher pour chaque ligne différente, le nombre de variations
+            diffLines.ForEach(line => Console.WriteLine($"Ligne {line.NumberHuman} : {countVariations(line)} différences"));
 
             /// Diff coloré
             // TODO: 11 Colorier les différences
