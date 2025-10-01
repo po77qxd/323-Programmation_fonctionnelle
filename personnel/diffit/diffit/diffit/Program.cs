@@ -1,4 +1,7 @@
-﻿namespace diffit
+﻿using System;
+using System.ComponentModel;
+
+namespace diffit
 {
     internal class Program
     {
@@ -22,8 +25,8 @@
             string? pathB = Console.ReadLine();
 
             //for dev
-            //pathA = "../../../v1.txt";
-            //pathB = "../../../v2.txt";
+            pathA = "../../../v1.txt";
+            pathB = "../../../v2.txt";
 
             // Vérification des entrées utilisateur
             var paths = new string?[] { pathA, pathB };
@@ -131,7 +134,23 @@
             // Les lettres similaires sont en vert
             // Les lettres différentes sont en rouge (options entre[a/b])
             // On n’indique rien sur les caractères en plus ou en moins
+            List<(char, char, int)> charList = new List<(char, char, int)> { };
 
+            diffLines
+                .ForEach(lineComp => lineComp.ContentA.Zip(lineComp.ContentB, (charA, charB) => (charA, charB, lineComp.NumberHuman)).ToList()
+                .GroupBy(charComp => charComp.NumberHuman)
+                .Select(group => new
+                {
+                    line = group.Key,
+                    chars = group
+                }).ToList().ForEach(x => x.chars.ToList().ForEach(charComp => Console.Write($"{(charComp.Item1 == charComp.Item2 ? charComp.Item1 : $"[{charComp.Item1}/{charComp.Item2}]")}"))));
+                //.Where(charComp => charComp.charA != charComp.charB)
+
+                //.ForEach(charComp => Console.WriteLine($"Ligne {lineComp.NumberHuman}:[{charComp.charA}/{charComp.charB}]")));
+                //.ForEach(charComp => charList.Add(charComp)));
+
+            //charList.ForEach(charComp => Console.Write($"{(charComp.Item1 == charComp.Item2 ? charComp.Item1 : $"[{charComp.Item1}/{charComp.Item2}]")}"));
+            
             /// Chiffrement
             // TODO: 11 Créer une fonction qui chiffre le 1er fichier en décalant les caratères d’un nombre
             //saisi par l’utilisateur (clé)
