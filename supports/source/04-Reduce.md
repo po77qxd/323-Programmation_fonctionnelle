@@ -2,7 +2,7 @@
 
 ![alt text](pile.jpg)
 
-Cet aspect a déjà été aperçu avec les fonctions `Sum` et `Average` utilisées pour [l'exercice Epsilon](../../exos/filter1/README.md#partie-2-epsilon).
+Cet aspect a déjà été aperçu avec les fonctions `Sum` et `Average` utilisées pour [l'exercice Epsilon](../../exos/words/README.md#partie-2--epsilon).
 
 Voici un exemple basique pour calculer une somme et une moyenne:
 
@@ -62,11 +62,12 @@ List<Person> cid5d = new List<Person>(){
     new Person(){Name="Claude",Age=17,Sisters=0,Brothers=0}
 };
 
-// Faire des groupes en fonction du nombre de frère/soeur
+// Faire des groupes en fonction de la taille de la famille
 var groups = cid5d
     .GroupBy(p => p.Sisters+p.Brothers)
+    .OrderBy(g => g.Key)
     .Select(group => new {                  // Objet anonyme
-        Agegroup = group.Key,
+        FamilySize = group.Key,
         Members = group.Select(p => p.Name)
     })
     .ToList();
@@ -74,11 +75,17 @@ var groups = cid5d
 // Affichage
 groups.ForEach(group =>
 {
-    Console.Write(String.Join(",", group.Members));
-    Console.Write(group.Members.Count() > 1 ? " ont " : " a ");
-    Console.Write(group.Agegroup + " frère/soeur");
-    Console.WriteLine();
+    Console.WriteLine($"Famille de {group.FamilySize}: {String.Join(",", group.Members)}");
 });
+```
+
+Résultat:
+
+```
+Famille de 0: Claude
+Famille de 1: Germaine,Pierre,Sylvie
+Famille de 3: Paul,Helmut,Ernest,Sidonie
+Famille de 4: Lucie
 ```
 
 ### Aggrégateur générique
@@ -92,7 +99,7 @@ int sum = numbers.Aggregate((current,next)=>current+next)
 Chaque élément est comparé à celui d'après et en résulte un seul élément défini par le lambda.
 Ainsi, à la fin de l'opération, _il ne doit en rester qu'un_...
 
-![Alt text](victory.webp)
+![](victory.webp)
 
 ### Réécriture de `Min`
 
@@ -104,13 +111,28 @@ int min = numbers.Aggregate((a,b)=>Convert.ToInt32(Math.Min(a,b))); //1
 
 Et ainsi de suite pour les autres opérateurs.
 
+#### Variantes d’aggrégateurs
+Hormis la fonction Aggregate présentée ci-dessus, il en existe 2 variantes.
+Elles partent du principe qu’on va souvent vouloir transformer le résultat final et que l’élément de départ (seed)
+n’est pas forcément inclus dans la liste. Au maximum elles contiennent 3 arguments:
+
+1. Seed (valeur de départ à comparer avec le 1er élément)
+2. Fonction d'aggrégation
+3. Choix de la forme du résultat
+
+#### Avec seed,fonction et transformation (1,2,3)
+``` csharp
+int sum = numbers.Aggregate(/*seed*/0,/**/(a,b)=>a+b,/*transformation*/number=>$"Somme:{number}");
+```
+
+#### Juste avec seed et fonction (1,2)
+``` csharp
+int sum = numbers.Aggregate(/*seed*/0,/**/(a,b)=>a+b);
+```
+
 ### Aggrégateurs avec classes
 
-Pour des types non primitifs, on doit utiliser une signature plus complète avec 3 éléments:
-
-- Seed (valeur de départ à comparer avec le 1er élément)
-- Fonction d'aggrégation
-- Choix de la forme du résultat
+Pour des types non primitifs, on doit justement utiliser une des variantes précédemment présentées:
 
 ```csharp
 var min = cid5d.Aggregate(
@@ -123,6 +145,8 @@ var min = cid5d.Aggregate(
 
 - 0
 - Paul
+- Germaine
+- Sylvie
 - Claude
 - 1
 - ...
