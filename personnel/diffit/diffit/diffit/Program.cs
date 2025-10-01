@@ -98,6 +98,7 @@
 
             // TODO: 07 Sélectionner les lignes qui ont des différences
             var diffLines = new List<LinesComparison>();
+            diffLines = comparisons.Where(lineComp => lineComp.ContentA != lineComp.ContentB).ToList();
 
             // TODO: 08 Afficher le nombre de lignes identiques et différentes entre les 2 fichiers
 
