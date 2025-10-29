@@ -9,17 +9,22 @@ namespace files
             string path = "../../../Projet";
             ListerFichiers(path);
         }
-        static void ListerFichiers(string chemin)
+        static void ListerFichiers(string chemin, int niveau = 0)
         {
             if (!Directory.Exists(chemin))
             {
                 return;
             }
-            Directory.GetFiles(chemin).ToList().ForEach(file => Console.WriteLine(Path.GetFileName(file)));
+            string indent = new string(' ', niveau * 2);
+            Directory.GetFiles(chemin).ToList().ForEach(file =>
+            {
+                Console.WriteLine(indent + "[F] " + Path.GetFileName(file));
+            });
+
             Directory.GetDirectories(chemin).ToList().ForEach(directory =>
             {
-                Console.WriteLine(Path.GetFileName(directory));
-                ListerFichiers(directory);
+                Console.WriteLine(indent + "[D] " + Path.GetFileName(directory));
+                ListerFichiers(directory, niveau + 1);
             });
         }
     }
